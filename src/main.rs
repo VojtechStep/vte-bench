@@ -29,12 +29,31 @@ mod bench {
         let mut dispatcher = DummyDispatcher;
 
         b.iter(|| {
-            parser.advance(&mut dispatcher, b'\x1b');
-            parser.advance(&mut dispatcher, b'[');
-            for _ in 0..10000 {
-                black_box(parser.advance(&mut dispatcher, b';'));
+            for _ in 0..100 {
+                parser.advance(&mut dispatcher, b'\x1b');
+                parser.advance(&mut dispatcher, b'[');
+                for _ in 0..10000 {
+                    black_box(parser.advance(&mut dispatcher, b';'));
+                }
+                parser.advance(&mut dispatcher, b'p');
             }
-            parser.advance(&mut dispatcher, b'p');
+        })
+    }
+
+    #[bench]
+    fn normal_parameters(b: &mut Bencher) {
+        let mut parser = Parser::new();
+        let mut dispatcher = DummyDispatcher;
+
+        b.iter(|| {
+            for _ in 0..100 {
+                parser.advance(&mut dispatcher, b'\x1b');
+                parser.advance(&mut dispatcher, b'[');
+                for _ in 0..10 {
+                    black_box(parser.advance(&mut dispatcher, b';'));
+                }
+                parser.advance(&mut dispatcher, b'p');
+            }
         })
     }
 }
