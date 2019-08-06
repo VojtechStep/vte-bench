@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 vte = { path = "../vte" }
+# vte = "0.3.3"
